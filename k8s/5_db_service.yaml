@@ -1,0 +1,14 @@
+---
+# Database service is made to ba accessed only in k8s cluster
+kind: Service
+apiVersion: v1
+metadata:
+  name: db
+  namespace: koel
+spec:
+  selector:
+    app: db
+  ports:
+    - protocol: TCP
+      port: 3306
+  clusterIP: None

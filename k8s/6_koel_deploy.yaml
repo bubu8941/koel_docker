@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: koel
+  name: app
+  labels:
+    app: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+        # local image as workaround for image and pull policy 
+        - image: local/koel
+          imagePullPolicy: Never
+          name: app
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "2000m"
+            requests:
+              memory: "1024Mi"
+              cpu: "2000m"
+          volumeMounts:
+            - name: koel-cover
+              mountPath: /var/www/html/public/img/covers
+            - name: koel-indexes
+              mountPath: /var/www/html/storage/search-indexes
+            - name: koel-music
+              mountPath: /music
+            # This is necessary for the koel to update the db schema, even on an empty DB
+            - name: koel-env
+              mountPath: "/var/www/html/.env"
+              subPath: .env
+
+      volumes:
+        - name: koel-cover
+          persistentVolumeClaim:
+            claimName: koel-cover
+        - name: koel-indexes
+          persistentVolumeClaim:
+            claimName: koel-indexes
+        - name: koel-music
+          persistentVolumeClaim:
+            claimName: koel-music
+        - name: koel-env
+          secret:
+            secretName: env-secret
+           
+            

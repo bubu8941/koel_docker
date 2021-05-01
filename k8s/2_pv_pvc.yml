@@ -1,0 +1,153 @@
+---
+# database storage PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: koel-db # to change
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 30Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  # properties of pvc to use pv
+  claimRef:
+    namespace: koel 
+    name: koel-db
+  hostPath:
+    path: "/path/to/k8s/koel/db" # to change
+---
+# Database storage PVC
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: koel-db
+  namespace: koel
+  annotations:
+    # here volume snapshooted daily and 7 days retention
+    # with k8s-snapshots
+    backup.kubernetes.io/deltas: P1D P7D
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 28Gi
+---
+# app cover PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: koel-cover # to change
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 30Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  # properties of pvc to use pv
+  claimRef:
+    namespace: koel 
+    name: koel-cover
+  hostPath:
+    path: "/path/to/k8s/koel/cover" # to change
+---
+# app cover PVC
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: koel-cover
+  namespace: koel
+  annotations:
+    # here volume snapshooted daily and 7 days retention
+    # with k8s-snapshots
+    backup.kubernetes.io/deltas: P1D P7D
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 28Gi
+---
+# app indexes PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: koel-indexes # to change
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 30Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  # properties of pvc to use pv
+  claimRef:
+    namespace: koel 
+    name: koel-indexes
+  hostPath:
+    path: "/path/to/k8s/koel/indexes" # to change
+---
+# app indexes PVC
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: koel-indexes
+  namespace: koel
+  annotations:
+    # here volume snapshooted daily and 7 days retention
+    # with k8s-snapshots
+    backup.kubernetes.io/deltas: P1D P7D
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 28Gi
+---
+# app music PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: koel-music # to change
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1000Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  # properties of pvc to use pv
+  claimRef:
+    namespace: koel 
+    name: koel-music
+  hostPath:
+    path: "/path/to/music" # to change
+---
+# app cover PVC
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: koel-music
+  namespace: koel
+  annotations:
+    # here volume snapshooted daily and 7 days retention
+    # with k8s-snapshots
+    backup.kubernetes.io/deltas: P1D P2D
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 950Gi
+

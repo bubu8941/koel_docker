@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: koel
+  name: db
+  labels:
+    app: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  strategy:
+      type: Recreate
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+        - image: mysql/mysql-server:5.7
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "2000m"
+            requests:
+              memory: "1024Mi"
+              cpu: "2000m"
+          name: db
+          volumeMounts:
+            - name: koel-db
+              mountPath: /var/lib/mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: koel-credentials
+                  key: mysql-root-password.secret
+            - name: MYSQL_DATABASE
+              value: koel
+            - name: MYSQL_USER 
+              value: "koel"
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: koel-credentials
+                  key: mysql-password.secret
+          ports:
+            - containerPort: 3306
+              name: db
